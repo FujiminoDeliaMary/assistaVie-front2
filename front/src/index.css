@@ -12,6 +12,9 @@ code {
     monospace;
 } */
 
+html {
+  font-family: "Open-Sans",  sans-serif;
+}
 
 @tailwind base;
 @tailwind components;
