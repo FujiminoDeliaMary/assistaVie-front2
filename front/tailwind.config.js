@@ -10,6 +10,7 @@ module.exports = {
           primaryC: '#0176D3',
           textC: '#0E0036', // Couleur par défaut
           sosC: '#D10000', // Couleur foncée
+          bleuC: '#9EC0FF',
         },
     },
     },
