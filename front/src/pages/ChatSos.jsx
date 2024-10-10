@@ -3,6 +3,7 @@ import SOS from '../assets/SOS.svg';
 import SizeFont from '../components/SizeFont';
 import Wave from 'react-wavify'
 import { Pencil, X } from 'lucide-react';
+import Chat from '../components/Chat';
 
 
 const ChatSos = () => {
@@ -18,6 +19,8 @@ const ChatSos = () => {
 
         
         {/* CHAT ICI !!!!! */}
+          <Chat typeChat="chat-sos"/>
+        {/* ///////////////////////// */}
 
         <div className='flex justify-center items-center gap-10 absolute bottom-3 w-full font-bold text-lg z-10 mx-auto'>
           <div className='flex flex-col justify-center items-center gap-3'>

@@ -4,6 +4,7 @@ import SizeFont from '../components/SizeFont';
 import Wave from 'react-wavify';
 import { Pencil, X } from 'lucide-react';
 import axios from 'axios';
+import Chat from '../components/Chat';
 
 const ChatVocal = () => {
   const [messages, setMessages] = useState([]);
@@ -11,44 +12,80 @@ const ChatVocal = () => {
   const [isVocal, setIsVocal] = useState(false);
   const [isSOS, setIsSOS] = useState(false); // État pour gérer le chatbot SOS
 
-  const sendMessage = useCallback(async () => {
-    const endpoint = isSOS ? 'chat-sos' : 'chat'; // Choisir l'endpoint en fonction du mode SOS ou non
-    console.log(endpoint)
+    const sendMessage = useCallback(async () => {
+      const endpoint = 'chat' // Choisir l'endpoint en fonction du mode SOS ou non
+      console.log(endpoint);
 
-    if (isVocal) {
-      // Mode vocal activé
-      const response = await axios.post(`http://localhost:5000/${endpoint}`, {
-        message: '',
-        isVocal: true
-      });
-      // Ajouter la réponse du bot
-      setMessages([...messages, { sender: 'bot', text: response.data.response }]);
-    } else if (input.trim() !== '') {
-      // Mode texte
-      const response = await axios.post(`http://localhost:5000/${endpoint}`, {
-        message: input,
-        isVocal: false
-      });
-      // Ajouter les messages à l'interface
-      setMessages([...messages, { sender: 'user', text: input }, { sender: 'bot', text: response.data.response }]);
-      setInput(''); // Réinitialiser l'input
-    }
+      try {
+          if (isVocal) {
+              // Mode vocal activé
+              const response = await fetch(`http://127.0.0.1:5000/${endpoint}`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      message: '',
+                      isVocal: true
+                  })
+              });
+
+              const data = await response.json(); // Récupérer la réponse JSO
+              // Ajouter la réponse du bot
+              setMessages([...messages, { sender: 'bot', text: data.response }]);
+              console.log('dans le vocal');
+          } else if (input.trim() !== '') {
+              // Mode texte
+              const response = await fetch(`http://127.0.0.1:5000/${endpoint}`, {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                      message: input,
+                      isVocal: false
+                  })
+              });
+
+              const data = await response.json(); // Récupérer la réponse JSON
+              console.log('pas de vocal');
+              // Ajouter les messages à l'interface
+              setMessages([...messages, { sender: 'user', text: input }, { sender: 'bot', text: data.response }]);
+              setInput(''); // Réinitialiser l'input
+          }
+
+          // Un autre test avec une autre requête
+          const testResponse = await fetch(`http://127.0.0.1:5000/${endpoint}`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                  message: 'chui tombée',
+                  isVocal: true
+              })
+          });
+
+          const testData = await testResponse.json(); // Récupérer la réponse JSON
+          console.log(testData, 'test');
+      } catch (error) {
+          console.error('Erreur lors de l\'appel à l\'API:', error);
+      }
   }, [isSOS, isVocal, input, messages]); // Dépendances mises à jour
 
+
+
   useEffect(() => {
-   
-      sendMessage();
-      console.log('dans le if')
-    
-    console.log('dans le useEffect');
+    sendMessage();
   }, [sendMessage, input, isVocal]);
 
+  
   const handleWriteClick = () => {
     setIsVocal(false);
     setInput(''); // Réinitialiser l'input si nécessaire
   };
 
-  console.log('hi')
+ 
 
   const handleStopSpeakingClick = () => {
     setIsVocal(true);
@@ -68,6 +105,10 @@ const ChatVocal = () => {
         N&apos;hésitez pas à me consulter.</p>
 
       {/* CHAT ICI !!!!! */}
+
+      <Chat typeChat="chat"/>
+
+      {/*  */}
       <div className='flex flex-col'>
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.sender}`}>

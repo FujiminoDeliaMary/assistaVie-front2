@@ -8,12 +8,13 @@ import ChatSos from '../pages/ChatSos';
 import DocumentPage from '../pages/DocumentPage';
 import ParamPage from '../pages/ParamPage';
 import ChatBot from '../pages/ChatBot';
+import VoiceToText from '../pages/VoiceToText';
 
 const App = () => {
   return (
     <BrowserRouter>
         <Routes >
-            <Route index element={<ChatBot />} />
+            <Route index element={<VoiceToText />} />
             <Route path='/home' element={<HomePage />} />
             <Route path='/vocal' element={<ChatVocal />} />
             <Route path='/sos' element={<ChatSos />} />

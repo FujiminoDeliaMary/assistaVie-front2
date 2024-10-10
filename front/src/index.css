@@ -21,3 +21,11 @@ code {
 html {
   font-family: "Open-Sans",  sans-serif;
 }
+
+.custom-scroll {
+  scrollbar-width: none; /* Masque la barre de défilement dans Firefox */
+}
+
+.custom-scroll::-webkit-scrollbar {
+  display: none; /* Masque la barre de défilement dans Chrome/Safari */
+}
