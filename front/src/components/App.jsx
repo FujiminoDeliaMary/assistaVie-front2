@@ -7,12 +7,13 @@ import ChatVocal from '../pages/ChatVocal';
 import ChatSos from '../pages/ChatSos';
 import DocumentPage from '../pages/DocumentPage';
 import ParamPage from '../pages/ParamPage';
+import ChatBot from '../pages/ChatBot';
 
 const App = () => {
   return (
     <BrowserRouter>
         <Routes >
-            <Route index element={<AuthPage />} />
+            <Route index element={<ChatBot />} />
             <Route path='/home' element={<HomePage />} />
             <Route path='/vocal' element={<ChatVocal />} />
             <Route path='/sos' element={<ChatSos />} />
