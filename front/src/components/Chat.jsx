@@ -16,6 +16,7 @@ const Chat = (props) => {
   const sendMessage = useCallback(async () => {
     const endpoint = typeChat // Choisir l'endpoint en fonction du mode SOS ou non
     console.log(endpoint);
+    const message = messages[messages.length - 1];
 
     try {
         if (isVocal) {
@@ -26,7 +27,7 @@ const Chat = (props) => {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    message: '',
+                    message: message,
                     isVocal: true
                 })
             });
@@ -85,40 +86,51 @@ const Chat = (props) => {
     return <span>Browser doesn't support speech recognition.</span>;
   }
 
-  return (
-    <div>
-      <p>Microphone: {listening ? 'on' : 'off'}</p>
-      <button onClick={SpeechRecognition.startListening}>Start</button>
-      <button onClick={SpeechRecognition.stopListening}>Stop</button>
-      <button onClick={resetTranscript}>Reset</button>
-      <p>{transcript}</p>
-    </div>
-  );
+  if (transcript){
+    setMessages(...messages, transcript);
+
+    sendMessage()
+  }
 
   // return (
-  //   <ul className='w-full mt-7 flex flex-col gap-7 px-8 h-96 overflow-y-auto custom-scroll'>
-  //     {conversations.map((sentence, index) => {
-  //       // Détermine la classe en fonction de l'index (pair ou impair)
-  //       const isEven = index % 2 === 0;
+  //   <div>
+  //     <p>Microphone: {listening ? 'on' : 'off'}</p>
+  //     <button onClick={SpeechRecognition.startListening}>Start</button>
+  //     <button onClick={SpeechRecognition.stopListening}>Stop</button>
+  //     <button onClick={resetTranscript}>Reset</button>
+     
+  //   </div>
+  // );
+
+  return (
+    <>
+    <button onClick={SpeechRecognition.startListening}>Start</button>
+    <button onClick={SpeechRecognition.stopListening}>Stop</button>
+    <button onClick={resetTranscript}>Reset</button>
+     
+    <ul className='w-full mt-7 flex flex-col gap-7 px-8 h-96 overflow-y-auto custom-scroll'>
+      {conversations.map((sentence, index) => {
+        // Détermine la classe en fonction de l'index (pair ou impair)
+        const isEven = index % 2 === 0;
         
-  //       // Si l'index est pair, message à gauche, sinon à droite
-  //       const listItemClass = isEven
-  //         ? "self-start bg-myCustomColor-violet"
-  //         : "self-end bg-myCustomColor-bleuC";
+        // Si l'index est pair, message à gauche, sinon à droite
+        const listItemClass = isEven
+          ? "self-start bg-myCustomColor-violet"
+          : "self-end bg-myCustomColor-bleuC";
 
-  //       return (
-  //         <li
-  //           key={index}
-  //           className={`${listItemClass} max-w-[70%] px-4 py-5 rounded-md font-medium text-white`}
-  //         >
-  //           {sentence}
-  //         </li>
-  //       );
-  //     })}
-  //   </ul>
-
+        return (
+          <li
+            key={index}
+            className={`${listItemClass} max-w-[70%] px-4 py-5 rounded-md font-medium text-white`}
+          >
+            {sentence}
+          </li>
+        );
+      })}
+    </ul>
+    </>
   
-  // )
+  )
 }
 
 export default Chat
